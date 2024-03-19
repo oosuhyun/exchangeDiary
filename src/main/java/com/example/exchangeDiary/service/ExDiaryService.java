@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +16,8 @@ public class ExDiaryService {
     private final ExDiaryRepository exDiaryRepository;
 
     //교환일기 생성
-    public void create(ExDiaryReq req){
+    public void create(ExDiaryReq req, String imgURL){
+        req.setImg(imgURL);
         exDiaryRepository.save(req.toEntity());
     }
 
@@ -27,11 +26,6 @@ public class ExDiaryService {
         ExDiary exDiary = exDiaryRepository.findById(id)
                 .orElseThrow(EntityExistsException::new);
         return ExDiaryRes.toDTO(exDiary);
-    }
-
-    //내 교환일기 조회
-    public List<ExDiary> findByExDiaryId(List<Long> id){
-        return exDiaryRepository.findByExDiaryId(id);
     }
 
     //교환일기 삭제

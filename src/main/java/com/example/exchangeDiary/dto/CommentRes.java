@@ -16,7 +16,7 @@ public class CommentRes {
 
     private Long commentId;
     private Long diaryId;
-    private String writer;
+    private String writerId;
     private String content;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
@@ -25,7 +25,7 @@ public class CommentRes {
         return CommentRes.builder()
                 .commentId(comment.getCommentId())
                 .diaryId(comment.getDiaryId())
-                .writer(comment.getWriter())
+                .writerId(comment.getWriterId())
                 .content(comment.getContent())
                 .createdDate(comment.getCreatedDate())
                 .modifiedDate(comment.getModifiedDate())

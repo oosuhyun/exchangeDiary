@@ -5,11 +5,13 @@ import com.example.exchangeDiary.dto.CommentRes;
 import com.example.exchangeDiary.entity.Comment;
 import com.example.exchangeDiary.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,13 +36,15 @@ public class CommentController {
                 .ok(commentService.findById(id));
     }
 
-    //일기 내 댓글 조회
-    @GetMapping("/diary")
-    public ResponseEntity<List<Comment>> getByDiaryId(
-            @RequestParam(value = "id") Long id
+    //일기 내에 댓글 조회
+    @GetMapping("/inDiary")
+    public ResponseEntity<Page<CommentRes>> getByDiaryId(
+            @RequestParam(value = "id") Long id,
+            @PageableDefault(sort = {"commentId"}, direction = Sort.Direction.DESC)
+            Pageable pageable
     ){
         return ResponseEntity
-                .ok(commentService.findByDiaryId(id));
+                .ok(commentService.findByDiaryId(id, pageable));
     }
 
     //댓글 삭제

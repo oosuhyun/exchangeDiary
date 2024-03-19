@@ -1,5 +1,6 @@
 package com.example.exchangeDiary.dto;
 
+import com.example.exchangeDiary.entity.ExDiary;
 import com.example.exchangeDiary.entity.TeamMember;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,14 +16,13 @@ import org.springframework.stereotype.Component;
 public class TeamMemberReq {
 
     private Long exDiaryId;
-    private String memberName;
-    private Character status;
+    private String userId;
 
-    public TeamMember toEntity() {
+    public TeamMember toEntity(TeamMemberReq req, ExDiary exDiary) {
         return TeamMember.builder()
-                .exDiaryId(this.exDiaryId)
-                .memberName(this.memberName)
-                .status('T')
+                .userId(req.userId)
+                .status("T")
+                .exDiary(exDiary)
                 .build();
     }
 

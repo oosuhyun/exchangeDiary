@@ -4,11 +4,14 @@ import com.example.exchangeDiary.dto.TeamMemberReq;
 import com.example.exchangeDiary.dto.TeamMemberRes;
 import com.example.exchangeDiary.service.TeamMemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +20,7 @@ public class TeamMemberController {
 
     private final TeamMemberService teamMemberService;
 
-    //교환일기 멤버 생성
+    //팀원 생성
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody TeamMemberReq req){
         teamMemberService.create(req);
@@ -26,39 +29,36 @@ public class TeamMemberController {
                 .build();
     }
 
-    //교환일기 멤버 단일조회
+    //팀원 단일 조회
     @GetMapping("/{id}")
     public ResponseEntity<TeamMemberRes> getById(@PathVariable Long id){
         return ResponseEntity
                 .ok(teamMemberService.findById(id));
     }
 
-    //교환일기 멤버 전체 조회
-    @GetMapping
-    public ResponseEntity<List<TeamMemberRes>> getBll(){
-        return ResponseEntity
-                .ok(teamMemberService.findAll());
-    }
-
-    //같은 교환일기 멤버 조회
-    @GetMapping("/search/team_member")
-    public ResponseEntity<List<TeamMemberRes>> getByExDiaryId(
-            @RequestParam(value= "exdiary_id") Long id
+    //교환일기 팀원 조회
+    @GetMapping("/inExDiary")
+    public ResponseEntity<Page<TeamMemberRes>> getByExDiary_ExDiaryIdAAndStatus(
+            @RequestParam(value= "id") Long id,
+            @PageableDefault(sort = {"teamMemberId"}, direction = Sort.Direction.DESC)
+            Pageable pageable
     ){
         return ResponseEntity
-                .ok(teamMemberService.findByExDiaryId(id));
+                .ok(teamMemberService.findByExDiary_ExDiaryIdAndStatus(id, pageable));
     }
 
-    //내가 포함된 교환일기 전체 조회
-    @GetMapping("/search/my_teams")
-    public ResponseEntity<List<Long>> getByMemberName(
-            @RequestParam(value= "name") String name
+    //내 교환일기 조회
+    @GetMapping("/myExDiary")
+    public ResponseEntity<Page<TeamMemberRes>> getByUserIdAndStatus(
+            @RequestParam(value= "id") String id,
+            @PageableDefault(sort = {"teamMemberId"}, direction = Sort.Direction.DESC)
+            Pageable pageable
     ){
         return ResponseEntity
-                .ok(teamMemberService.findByMemberName(name));
+                .ok(teamMemberService.findByUserIdAndStatus(id, pageable));
     }
 
-    //멤버 탈퇴
+    //팀원 탈퇴
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id){
         teamMemberService.deleteById(id);

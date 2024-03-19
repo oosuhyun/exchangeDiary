@@ -1,31 +1,26 @@
 package com.example.exchangeDiary.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExDiary extends BaseTimeEntity{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long exDiaryId;
     private LocalDateTime startDate;
     private LocalDateTime finishDate;
     private String exDiaryName;
-    private String createMemberName;
-
-//    @OneToMany(mappedBy = "exDiary")
-//    private List<ExDiary_Member> exDiary_members = new ArrayList<>();
+    private String createUserId;
+    private String img;
+    private String backgroundColor;
 
 }

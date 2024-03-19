@@ -18,13 +18,13 @@ import java.time.LocalDateTime;
 public class CommentReq {
 
     private Long diaryId;
-    private String writer;
+    private String writerId;
     private String content;
 
     public Comment toEntity(){
         return Comment.builder()
                 .diaryId(this.diaryId)
-                .writer(this.writer)
+                .writerId(this.writerId)
                 .content(this.content)
                 .build();
     }

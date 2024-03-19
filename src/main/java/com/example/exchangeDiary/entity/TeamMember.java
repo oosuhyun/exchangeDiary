@@ -3,24 +3,23 @@ package com.example.exchangeDiary.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class TeamMember extends BaseTimeEntity{
 
     @Id
     @GeneratedValue
-    private Long memberId;
-    private Long exDiaryId;
-    private String memberName;
-    private Character status;  //탈퇴했으면 F
+    private Long teamMemberId;
+    private String userId;
+    private String status;  //탈퇴했으면 F
 
-//    @OneToMany(mappedBy = "member")
-//    private List<ExDiary_Member> exDiary_members = new ArrayList<>();
-
+    @ManyToOne
+    @JoinColumn(name = "exDiaryId")
+    private ExDiary exDiary;
 
 }

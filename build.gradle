@@ -30,6 +30,16 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+//	implementation 'javax.inject:javax.inject:1'
+	implementation 'jakarta.inject:jakarta.inject-api:2.0.1'
+//	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+
+//	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+	runtimeOnly 'mysql:mysql-connector-java:8.0.25'
+
+//	runtimeOnly 'mysql:mysql-connector-java'
 }
 
 tasks.named('test') {

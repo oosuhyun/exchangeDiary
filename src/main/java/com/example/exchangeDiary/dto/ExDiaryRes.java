@@ -20,7 +20,9 @@ public class ExDiaryRes {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private String exDiaryName;
-    private String createMemberName;
+    private String createUserId;
+    private String img;
+    private String backgroundColor;
 
     public static ExDiaryRes toDTO(ExDiary exDiary){
         return ExDiaryRes.builder()
@@ -30,7 +32,9 @@ public class ExDiaryRes {
                 .createdDate(exDiary.getCreatedDate())
                 .modifiedDate(exDiary.getModifiedDate())
                 .exDiaryName(exDiary.getExDiaryName())
-                .createMemberName(exDiary.getCreateMemberName())
+                .createUserId(exDiary.getCreateUserId())
+                .img(exDiary.getImg())
+                .backgroundColor(exDiary.getBackgroundColor())
                 .build();
     }
 

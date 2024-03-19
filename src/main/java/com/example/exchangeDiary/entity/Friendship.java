@@ -6,25 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Diary extends BaseTimeEntity{
+public class Friendship {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long diaryId;
+    private Long friendshipId;
     private String userId;
-    private String writing;
-    private String img;
-    private String weather;
-    private String place;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<User> friendList;
 
-    @ManyToOne
-    @JoinColumn(name = "exDiaryId")
-    private ExDiary exDiary;
+    public void addFriend(User user) {
+        this.friendList.add(user);
+    }
 
 }

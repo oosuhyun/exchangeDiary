@@ -1,12 +1,13 @@
 package com.example.exchangeDiary.repository;
 
 import com.example.exchangeDiary.entity.Diary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long>{
 
-    List<Diary> findByExDiaryId(Long id);
+    Page<Diary> findByExDiary_ExDiaryId(Long id, Pageable pageable);
 
 }

@@ -8,7 +8,6 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 @Getter
 @Setter
@@ -20,14 +19,18 @@ public class ExDiaryReq {
     private LocalDateTime startDate;
     private LocalDateTime finishDate;
     private String exDiaryName;
-    private String createMemberName;
+    private String createUserId;
+    private String img;
+    private String backgroundColor;
 
     public ExDiary toEntity() {
         return ExDiary.builder()
                 .startDate(this.startDate)
                 .finishDate(this.finishDate)
                 .exDiaryName(this.exDiaryName)
-                .createMemberName(this.createMemberName)
+                .createUserId(this.createUserId)
+                .img(this.img)
+                .backgroundColor(this.backgroundColor)
                 .build();
     }
 

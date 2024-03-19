@@ -1,12 +1,14 @@
 package com.example.exchangeDiary.service;
 
-import com.example.exchangeDiary.dto.ExDiaryRes;
 import com.example.exchangeDiary.dto.TeamMemberReq;
 import com.example.exchangeDiary.dto.TeamMemberRes;
 import com.example.exchangeDiary.entity.ExDiary;
 import com.example.exchangeDiary.entity.TeamMember;
+import com.example.exchangeDiary.repository.ExDiaryRepository;
 import com.example.exchangeDiary.repository.TeamMemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -18,49 +20,40 @@ import java.util.stream.Collectors;
 public class TeamMemberService {
 
     private final TeamMemberRepository teamMemberRepository;
+    private final ExDiaryRepository exDiaryRepository;
 
-    //교환일기 멤버 생성
+    //팀원 생성
     public void create(TeamMemberReq req){
-        teamMemberRepository.save(req.toEntity());
+        ExDiary exDiary = exDiaryRepository.findById(req.getExDiaryId())
+                .orElseThrow(EntityExistsException::new);
+        teamMemberRepository.save(req.toEntity(req, exDiary));
     }
 
-    //교환일기 멤버 단일조회
+    //팀원 단일 조회
     public TeamMemberRes findById(Long id){
         TeamMember teamMember = teamMemberRepository.findById(id)
                 .orElseThrow(EntityExistsException::new);
         return TeamMemberRes.toDTO(teamMember);
     }
 
-    //교환일기 멤버 전체 조회
-    public List<TeamMemberRes> findAll(){
-        return teamMemberRepository.findAll()
-                .stream()
-                .map(TeamMemberRes::toDTO)
-                .collect(Collectors.toList());
+    //교환일기 팀원 조회
+    public Page<TeamMemberRes> findByExDiary_ExDiaryIdAndStatus(Long id, Pageable pageable){
+        return teamMemberRepository.findByExDiary_ExDiaryIdAndStatus(id, "T", pageable)
+                .map(TeamMemberRes::toDTO);
     }
 
-    //같은 교환일기 멤버 조회
-    public List<TeamMemberRes> findByExDiaryId(Long id){
-        return teamMemberRepository.findByExDiaryId(id)
-                .stream()
-                .map(TeamMemberRes::toDTO)
-                .collect(Collectors.toList());
+    //내 교환일기 조회
+    public Page<TeamMemberRes> findByUserIdAndStatus(String id, Pageable pageable){
+        return teamMemberRepository.findByUserIdAndStatus(id, "T", pageable)
+                .map(TeamMemberRes::toDTO);
     }
 
-    //내가 포함된 교환일기 전체 조회
-    public List<Long> findByMemberName(String name){
-        return teamMemberRepository.findByMemberName(name)
-                .stream()
-                .map(TeamMember::getExDiaryId)
-                .collect(Collectors.toList());
-    }
-
-    //멤버 탈퇴
+    //팀원 탈퇴
     public void deleteById(Long id){
         TeamMember teamMember = teamMemberRepository.findById(id)
                 .orElseThrow(EntityExistsException::new);
-        TeamMemberRes teamMemberRes = TeamMemberRes.toDTO(teamMember);
-        teamMemberRes.setStatus('F'); //멤버 상태 F(false) 변경
+        teamMember.setStatus("F"); //멤버 상태 F(false) 변경
+        teamMemberRepository.save(teamMember);
     }
 
 }

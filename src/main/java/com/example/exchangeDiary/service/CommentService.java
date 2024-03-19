@@ -5,10 +5,11 @@ import com.example.exchangeDiary.dto.CommentRes;
 import com.example.exchangeDiary.entity.Comment;
 import com.example.exchangeDiary.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +30,9 @@ public class CommentService {
     }
 
     //일기 내에 모든 댓글 조회
-    public List<Comment> findByDiaryId(Long id){
-        return commentRepository.findByDiaryId(id);
+    public Page<CommentRes> findByDiaryId(Long id, Pageable pageable){
+        return commentRepository.findByDiaryId(id, pageable)
+                .map(CommentRes::toDTO);
     }
 
     public void deleteById(Long id){
