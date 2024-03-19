@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mate">
+    <select id="getMateList" resultType="com.example.exchangeDiary.dto.MateInfoDto">
+        SELECT responseMate AS mateId, user.userName AS mateName, mate.status AS status
+        FROM mate LEFT JOIN user ON mate.responseMate = user.userId
+        WHERE requestMate = #{userId}
+        UNION
+        SELECT requestMate AS mateId, user.userName AS mateName, mate.status AS status
+        FROM mate LEFT JOIN user ON mate.requestMate = user.userId
+        WHERE responseMate = #{userId}
+        ORDER BY FIELD(status, 'n', 'x', 'y')
+    </select>
+
+    <select id="isMate" resultType="com.example.exchangeDiary.dto.MateDto">
+        SELECT *
+        FROM mate
+        WHERE requestMate=#{userId} AND responseMate=#{mateId}
+        UNION
+        SELECT *
+        FROM mate
+        WHERE requestMate=#{mateId} AND responseMate=#{userId}
+    </select>
+
+    <insert id="requestMate">
+        INSERT INTO mate (requestMate, responseMate, status)
+        VALUES
+            (
+                #{userId},
+                #{mateId},
+                'n'
+            )
+    </insert>
+
+    <update id="responseMate">
+        UPDATE mate SET status = 'y'
+        WHERE requestMate = #{userId} AND responseMate = #{mateId} AND status = 'n'
+    </update>
+
+    <delete id="deleteMate">
+        DELETE FROM mate
+        WHERE requestMate = #{userId} AND responseMate = #{mateId} AND status = 'y'
+    </delete>
+</mapper>
